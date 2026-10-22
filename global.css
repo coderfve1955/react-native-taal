@@ -113,6 +113,53 @@
   color: var(--color-background);
 }
 
+/* Auth (BEM: block `auth-field` for the labeled input cards, `social-button` for provider buttons) */
+@utility auth-field {
+  justify-content: center;
+  min-height: 74px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 20px;
+  border-width: 1px;
+  border-color: #e8eaf2;
+  background-color: var(--color-background);
+}
+
+@utility auth-field__label {
+  font-family: var(--font-poppins);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+@utility social-button {
+  flex-direction: row;
+  align-items: center;
+  height: 56px;
+  padding-left: 36px;
+  border-radius: 18px;
+  border-width: 1px;
+  border-color: #e8eaf2;
+  background-color: var(--color-background);
+}
+
+@utility social-button__label {
+  margin-left: 32px;
+  font-family: var(--font-poppins-medium);
+  font-size: 16px;
+  color: var(--color-text-primary);
+}
+
+/* Verification code box: border color is set per state (filled / active) next to the utility */
+@utility code-box {
+  width: 48px;
+  height: 58px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  border-width: 1.5px;
+  background-color: var(--color-surface);
+}
+
 /* Surfaces */
 @utility card {
   background-color: var(--color-background);
