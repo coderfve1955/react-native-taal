@@ -1,6 +1,7 @@
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import {
+  Alert,
   Image,
   ScrollView,
   Text,
@@ -12,9 +13,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { VerificationModal } from "@/components/VerificationModal";
 import { images } from "@/constants/images";
+import { type AuthMode, type SocialProvider, useAuthFlow } from "@/hooks/useAuthFlow";
 import { colors, fonts } from "@/theme";
-
-type AuthMode = "sign-up" | "sign-in";
 
 // Sign Up and Sign In share one layout; only the copy and the password field differ.
 const copy = {
@@ -58,6 +58,40 @@ export function AuthScreen({ mode }: { mode: AuthMode }) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  const { sendCode, verifyCode, continueWithSocial } = useAuthFlow(mode);
+
+  const showError = (message: string) => Alert.alert("Something went wrong", message);
+
+  // Step 1: Clerk emails a code, then the verification modal opens.
+  const handleSubmit = async () => {
+    setBusy(true);
+    const error = await sendCode(email.trim(), password);
+    setBusy(false);
+
+    if (error) {
+      showError(error);
+      return;
+    }
+    setVerifying(true);
+  };
+
+  // Step 2: the verification modal sends the code back. On success Clerk starts the session
+  // and the route guard in the root layout moves the user to the home route.
+  const handleVerify = async (code: string) => {
+    const error = await verifyCode(code);
+    if (error) showError(error);
+    return error;
+  };
+
+  const handleSocial = async (provider: SocialProvider) => {
+    setBusy(true);
+    const error = await continueWithSocial(provider);
+    setBusy(false);
+
+    if (error) showError(error);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.neutral.background }}>
@@ -143,7 +177,8 @@ export function AuthScreen({ mode }: { mode: AuthMode }) {
           <TouchableOpacity
             className="button--primary mt-5"
             activeOpacity={0.85}
-            onPress={() => setVerifying(true)}
+            disabled={busy}
+            onPress={handleSubmit}
           >
             <Text className="button__label">{button}</Text>
           </TouchableOpacity>
@@ -156,7 +191,13 @@ export function AuthScreen({ mode }: { mode: AuthMode }) {
 
           <View className="mt-4 gap-2.5">
             {socialProviders.map(({ name, icon }) => (
-              <TouchableOpacity key={name} className="social-button" activeOpacity={0.7}>
+              <TouchableOpacity
+                key={name}
+                className="social-button"
+                activeOpacity={0.7}
+                disabled={busy}
+                onPress={() => handleSocial(name)}
+              >
                 <Image source={icon} className="h-7 w-7" resizeMode="contain" />
                 <Text className="social-button__label">Continue with {name}</Text>
               </TouchableOpacity>
@@ -178,7 +219,7 @@ export function AuthScreen({ mode }: { mode: AuthMode }) {
         visible={verifying}
         email={email}
         onClose={() => setVerifying(false)}
-        onVerified={() => router.replace("/")}
+        onSubmit={handleVerify}
       />
     </SafeAreaView>
   );
