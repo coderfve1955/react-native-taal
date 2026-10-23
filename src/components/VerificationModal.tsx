@@ -16,19 +16,30 @@ type VerificationModalProps = {
   visible: boolean;
   email: string;
   onClose: () => void;
-  // Called as soon as the last digit is entered.
-  onVerified: () => void;
+  // Called as soon as the last digit is entered. Resolves to an error message, or undefined on success.
+  onSubmit: (code: string) => Promise<string | undefined>;
 };
 
-export function VerificationModal({ visible, email, onClose, onVerified }: VerificationModalProps) {
+export function VerificationModal({ visible, email, onClose, onSubmit }: VerificationModalProps) {
   const [code, setCode] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
-  const handleChange = (text: string) => {
+  const handleChange = async (text: string) => {
+    if (submitting) return;
+
     const digits = text.replace(/\D/g, "").slice(0, CODE_LENGTH);
     setCode(digits);
-    if (digits.length === CODE_LENGTH) {
-      onVerified();
+    if (digits.length < CODE_LENGTH) return;
+
+    setSubmitting(true);
+    const error = await onSubmit(digits);
+    setSubmitting(false);
+
+    // Wrong code: clear the boxes so the user can type again.
+    if (error) {
+      setCode("");
+      inputRef.current?.focus();
     }
   };
 
