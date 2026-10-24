@@ -1,11 +1,12 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, type LayoutChangeEvent, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { LanguageCard } from "@/components/LanguageCard";
 import { images } from "@/constants/images";
 import { LANGUAGES } from "@/data/languages";
+import { useLanguageStore } from "@/store/languageStore";
 import { colors, fonts } from "@/theme";
 import type { LanguageCode } from "@/types/learning";
 
@@ -16,8 +17,11 @@ const EARTH_PADDING = 0.17;
 export default function LanguageSelection() {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  // Local for now; the selected language moves into a Zustand store in a later step.
-  const [selectedCode, setSelectedCode] = useState<LanguageCode>(LANGUAGES[0].code);
+  const savedLanguage = useLanguageStore((state) => state.selectedLanguage);
+  const selectLanguage = useLanguageStore((state) => state.selectLanguage);
+  // The highlighted card is local until the user confirms; only then is it saved in the store.
+  const [selectedCode, setSelectedCode] = useState<LanguageCode>(savedLanguage ?? LANGUAGES[0].code);
+  const [confirmed, setConfirmed] = useState(false);
 
   const [earthArea, setEarthArea] = useState({ width: 0, height: 0 });
 
@@ -27,6 +31,23 @@ export default function LanguageSelection() {
   const onEarthLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
     setEarthArea({ width, height });
+  };
+
+  // First-time users arrive here without a screen to go back to.
+  const onBack = () => {
+    if (router.canGoBack()) router.back();
+  };
+
+  // Saving the language opens the home route in the layout; go there once that has happened.
+  useEffect(() => {
+    if (confirmed && savedLanguage) {
+      router.replace("/");
+    }
+  }, [confirmed, savedLanguage, router]);
+
+  const onConfirm = () => {
+    selectLanguage(selectedCode);
+    setConfirmed(true);
   };
 
   const visibleLanguages = LANGUAGES.filter((language) =>
@@ -42,7 +63,7 @@ export default function LanguageSelection() {
             <TouchableOpacity
               className="absolute left-0 h-10 w-10 justify-center"
               activeOpacity={0.7}
-              onPress={() => router.back()}
+              onPress={onBack}
             >
               {/* Back chevron: two borders of a rotated square */}
               <View className="ml-1 h-3 w-3 -rotate-45 border-b-2 border-l-2 border-text-primary" />
@@ -86,7 +107,7 @@ export default function LanguageSelection() {
             ))}
           </View>
 
-          <TouchableOpacity className="button--primary mt-5" activeOpacity={0.85} onPress={() => router.back()}>
+          <TouchableOpacity className="button--primary mt-5" activeOpacity={0.85} onPress={onConfirm}>
             <Text className="button__label">Confirm</Text>
           </TouchableOpacity>
         </View>
