@@ -160,6 +160,60 @@
   background-color: var(--color-surface);
 }
 
+/* Language selection (BEM: block `search-field`, block `language-card` with a `--selected` modifier) */
+@utility search-field {
+  flex-direction: row;
+  align-items: center;
+  height: 48px;
+  padding-left: 18px;
+  padding-right: 18px;
+  border-radius: 24px;
+  border-width: 1px;
+  border-color: #e8eaf2;
+  background-color: var(--color-surface);
+}
+
+@utility language-card {
+  flex-direction: row;
+  align-items: center;
+  min-height: 78px;
+  padding-left: 14px;
+  padding-right: 20px;
+  border-radius: 24px;
+  border-width: 1px;
+  border-color: #eef0f6;
+  background-color: var(--color-background);
+}
+
+@utility language-card--selected {
+  border-width: 1.5px;
+  border-color: #8b7bf5;
+  background-color: #f6f4ff;
+}
+
+@utility language-card__flag {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border-width: 1px;
+  border-color: #eef0f6;
+  background-color: var(--color-surface);
+}
+
+@utility language-card__name {
+  font-family: var(--font-poppins-medium);
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+}
+
+@utility language-card__learners {
+  font-family: var(--font-poppins);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
 /* Surfaces */
 @utility card {
   background-color: var(--color-background);

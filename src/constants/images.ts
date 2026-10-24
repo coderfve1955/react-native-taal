@@ -1,4 +1,5 @@
 import appleLogo from "@/assets/images/apple-logo.png";
+import earth from "@/assets/images/earth.png";
 import eye from "@/assets/images/eye.png";
 import eyeOff from "@/assets/images/eye-off.png";
 import facebookLogo from "@/assets/images/facebook-logo.png";
@@ -9,6 +10,7 @@ import mascotWelcome from "@/assets/images/mascot-welcome.png";
 
 export const images = {
   appleLogo,
+  earth,
   eye,
   eyeOff,
   facebookLogo,
