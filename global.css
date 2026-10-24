@@ -237,6 +237,52 @@
   color: var(--color-text-secondary);
 }
 
+/* Home screen (BEM: block `home-card` for the rounded cards, `plan-item` for the today's plan rows) */
+@utility home-card {
+  border-radius: 24px;
+}
+
+@utility home-card__label {
+  font-family: var(--font-poppins-medium);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+@utility home-section__title {
+  font-family: var(--font-poppins-semibold);
+  font-size: 17px;
+  line-height: 26px;
+  color: var(--color-text-primary);
+}
+
+@utility plan-item {
+  flex-direction: row;
+  align-items: center;
+  height: 40px;
+}
+
+@utility plan-item__icon {
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+@utility plan-item__title {
+  font-family: var(--font-poppins-semibold);
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--color-text-primary);
+}
+
+@utility plan-item__subtitle {
+  font-family: var(--font-poppins);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-text-secondary);
+}
+
 /* Surfaces */
 @utility card {
   background-color: var(--color-background);

@@ -4,6 +4,7 @@ export interface Language {
   code: LanguageCode;
   name: string;
   nativeName: string;
+  greeting: string;
   flag: string;
   color: string;
   learners: string;
