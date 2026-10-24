@@ -214,6 +214,29 @@
   color: var(--color-text-secondary);
 }
 
+/* Bottom tab bar (BEM: block `tab-bar`, elements for the tab item and its label; the active circle is animated in the component) */
+@utility tab-bar {
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 32px;
+  border-width: 1px;
+  border-color: #eef0f6;
+  background-color: var(--color-background);
+}
+
+@utility tab-bar__item {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+@utility tab-bar__label {
+  margin-top: 2px;
+  font-family: var(--font-poppins-medium);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
 /* Surfaces */
 @utility card {
   background-color: var(--color-background);
