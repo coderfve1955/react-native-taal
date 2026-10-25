@@ -7,10 +7,11 @@ const config = withNativewind(getDefaultConfig(__dirname));
 
 // Temporary workaround for NativeWind 5 RC + React Native 0.88: NativeWind swaps `react-native` for a
 // wrapper that has no `AssetRegistry`, which expo-asset (used for fonts and icons) needs.
-// Let expo-asset import the real `react-native`. Remove once react-native-css supports RN 0.88.
+// Let expo-asset import the real `react-native`. Native only: on web `react-native` must stay `react-native-web`,
+// which has its own AssetRegistry. Remove once react-native-css supports RN 0.88.
 const resolveWithNativewind = config.resolver.resolveRequest;
 config.resolver.resolveRequest = (context, moduleName, platform) => {
-  if (moduleName === "react-native" && context.originModulePath.includes("/node_modules/expo-asset/")) {
+  if (platform !== "web" && moduleName === "react-native" && context.originModulePath.includes("/node_modules/expo-asset/")) {
     return { type: "sourceFile", filePath: path.join(path.dirname(require.resolve("react-native/package.json")), "index.js") };
   }
   return resolveWithNativewind(context, moduleName, platform);
