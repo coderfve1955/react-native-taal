@@ -4,6 +4,7 @@ export interface Language {
   code: LanguageCode;
   name: string;
   nativeName: string;
+  greeting: string;
   flag: string;
   color: string;
   learners: string;
@@ -61,6 +62,8 @@ export interface Lesson {
   activities: Activity[];
   aiTeacherPrompt: AITeacherPrompt;
 }
+
+export type LessonStatus = "completed" | "in-progress" | "not-started";
 
 export interface Unit {
   id: string;

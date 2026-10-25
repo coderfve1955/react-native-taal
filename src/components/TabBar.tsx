@@ -22,7 +22,7 @@ const TABS: Record<string, { label: string; icon: IconName; activeIcon: IconName
 
 // Floating tab bar. The selected tab sits in a purple circle (icon only) that slides between tabs;
 // the other tabs show their icon and label. The slide is a plain linear timing animation (no spring bounce).
-export function TabBar({ state, navigation, insets }: BottomTabBarProps) {
+export function TabBar({ state, emitter, navigateToTab, insets }: BottomTabBarProps) {
   const [rowWidth, setRowWidth] = useState(0);
   const tabWidth = rowWidth / state.routes.length;
   const circleX = useSharedValue(0);
@@ -48,10 +48,10 @@ export function TabBar({ state, navigation, insets }: BottomTabBarProps) {
     transform: [{ translateX: circleX.get() }],
   }));
 
-  const onPress = (routeKey: string, routeName: string, isFocused: boolean) => {
-    const event = navigation.emit({ type: "tabPress", target: routeKey, canPreventDefault: true });
+  const onPress = (routeKey: string, isFocused: boolean) => {
+    const event = emitter.emit({ type: "tabPress", target: routeKey, canPreventDefault: true });
     if (!isFocused && !event.defaultPrevented) {
-      navigation.navigate(routeName);
+      navigateToTab(routeKey);
     }
   };
 
@@ -73,7 +73,7 @@ export function TabBar({ state, navigation, insets }: BottomTabBarProps) {
                 accessibilityRole="button"
                 accessibilityState={{ selected: isFocused }}
                 accessibilityLabel={tab.label}
-                onPress={() => onPress(route.key, route.name, isFocused)}
+                onPress={() => onPress(route.key, isFocused)}
               >
                 {isFocused ? (
                   <Ionicons name={tab.activeIcon} size={26} color={colors.neutral.background} />
