@@ -1,4 +1,5 @@
 import appleLogo from "@/assets/images/apple-logo.png";
+import audioLessonFade from "@/assets/images/audio-lesson-fade.png";
 import earth from "@/assets/images/earth.png";
 import eye from "@/assets/images/eye.png";
 import eyeOff from "@/assets/images/eye-off.png";
@@ -13,6 +14,7 @@ import treasure from "@/assets/images/treasure.png";
 
 export const images = {
   appleLogo,
+  audioLessonFade,
   earth,
   eye,
   eyeOff,

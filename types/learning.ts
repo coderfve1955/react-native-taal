@@ -63,6 +63,8 @@ export interface Lesson {
   aiTeacherPrompt: AITeacherPrompt;
 }
 
+export type LessonStatus = "completed" | "in-progress" | "not-started";
+
 export interface Unit {
   id: string;
   languageCode: LanguageCode;

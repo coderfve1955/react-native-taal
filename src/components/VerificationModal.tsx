@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { type ComponentRef, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   Modal,
@@ -23,7 +23,7 @@ type VerificationModalProps = {
 export function VerificationModal({ visible, email, onClose, onSubmit }: VerificationModalProps) {
   const [code, setCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<ComponentRef<typeof TextInput>>(null);
 
   const handleChange = async (text: string) => {
     if (submitting) return;
